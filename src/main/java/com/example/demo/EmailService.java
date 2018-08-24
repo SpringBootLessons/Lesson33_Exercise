@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -15,16 +16,19 @@ public class EmailService {
   private TemplateEngine templateEngine;
 
   @Autowired
+  Environment env;
+
+  @Autowired
   public EmailService(TemplateEngine templateEngine) {
     this.templateEngine = templateEngine;
   }
 
   private Properties GetProperties(){
     Properties props = new Properties();
-    props.put("mail.smtp.starttls.enable", "true");
-    props.put("mail.smtp.auth", "true");
-    props.put("mail.smtp.host", "smtp.gmail.com");
-    props.put("mail.smtp.port", "587");
+    props.put("mail.smtp.starttls.enable", env.getProperty("mail.smtp.starttls.enable"));
+    props.put("mail.smtp.auth", env.getProperty("mail.smtp.auth"));
+    props.put("mail.smtp.host", env.getProperty("mail.smtp.host"));
+    props.put("mail.smtp.port", env.getProperty("mail.smtp.port"));
 
     return  props;
   }
